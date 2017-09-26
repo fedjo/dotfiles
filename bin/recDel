@@ -1,0 +1,4 @@
+#/bin/bash
+
+echo "Usage: recDel <root_Dir> <file/s>"
+find $1 -name $2 -print | xargs rm 

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+##SSH TUNNEL to fedjo@animal.foss.ntua.gr to port 22
+##The tunnel is established to localport given in stdin
+##You must then proxy your application to that port
+
+ssh -p 22 -D $1 -f -C -q -N fedjo@animal.foss.ntua.gr
+#ssh -p 22 -D $1 -f -C -q -N cslaba05@danaos
+

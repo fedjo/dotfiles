@@ -1,0 +1,10 @@
+#!/bin/bash
+
+killall conky
+
+#sleep 5
+for i in ~/.conky/running/*
+do
+    sleep 1
+    conky -qc "$i" &
+done

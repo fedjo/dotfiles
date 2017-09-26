@@ -1,0 +1,23 @@
+#!/bin/bash
+
+name=$(whoami)
+echo "Hello $name !"
+echo "Give media path"
+read path
+cd $path
+echo "Give starting letter of .mp4 file"
+read start
+
+if [ $(ls "$start"* | wc -l) = 1 ]; then
+    ls "$start"*
+    ls "$start"* > .tmp
+    ret=$(<.tmp)
+    echo "$(ret)"
+### Convertion ###
+    ffmpeg -i "$ret" "$ret.mp3"
+    clear
+    echo "Done"
+    rm .tmp
+else
+    echo Try to specify your search
+fi

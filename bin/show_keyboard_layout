@@ -1,0 +1,13 @@
+#! /bin/bash
+ 
+current=$(setxkbmap -print | grep xkb_symbols | awk -F"+" '{print $2}')
+
+if [[ $current = "us" ]]
+then
+echo "<fc=#0000ff> English </fc>"
+fi
+
+if [[ $current = "gr" ]]
+then
+echo "<fc=#ffff00> Greek </fc>"
+fi

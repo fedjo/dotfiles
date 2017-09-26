@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir /media/WinDisk
+mount -o uid=root /dev/sda1 /media/WinDisk
+service libvirtd start
+setenforce 0
+virt-manager &

@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+# Author: Trizen
+# License: GPLv3
+# Date: 07 April 2012
+# http://trizen.googlecode.com
+
+eval 'exec perl $0 ${1+"$@"}'
+  if 0;    # not running under some shell
+
+use 5.010;
+use strict;
+use warnings;
+
+use Text::CHM;
+
+use File::Temp qw(tempdir);
+use File::Path qw(make_path);
+use File::Spec::Functions qw(catdir);
+use File::Basename qw(dirname basename);
+
+use URI::Escape qw(uri_unescape);
+
+my $appname = 'chm-to-pdf';
+my $version = '0.01';
+
+# Requires 'wkhtmltopdf'
+# See: http://code.google.com/p/wkhtmltopdf/
+my $html2pdf_command = 'wkhtmltopdf';
+
+if (qr/^-(?:[Vv]|-version)\z/ ~~ \@ARGV) {
+    say "$appname $version";
+    exit 0;
+}
+
+@ARGV or die "usage: $0 [.chm files]\n";
+
+foreach my $chm_file (grep { -f } @ARGV) {
+
+    say "** Processing $chm_file";
+
+    my $tmpdir = tempdir(CLEANUP => 1);
+    my $chm = 'Text::CHM'->new($chm_file);
+
+    my $output_file = basename($chm_file);
+    $output_file =~ s/\.chm\z//i;
+    $output_file .= '.pdf';
+
+    foreach my $item ($chm->get_filelist) {
+
+        my $path = $item->{path};
+        my $file = catdir($tmpdir, $path);
+
+        if ($item->{size} == 0 and $item->{title} ~~ undef) {
+            make_path($file);
+        }
+        else {
+            open my $fh, '>', $file or do { warn "$appname: cannot open file '$file' for write: $!\n"; next };
+            print {$fh} $chm->get_object($path);
+            close $fh;
+        }
+    }
+
+    my ($hhc_file, $hhc_dir);
+    opendir(my $dir_h, $tmpdir) or do { warn "$appname: cannot open dir $tmpdir: $!\n"; next };
+    while (defined(my $file = readdir $dir_h)) {
+        if ($file =~ /.\.hhc\z/i) {
+            $hhc_file = catdir($tmpdir, $file);
+            $hhc_dir = dirname($hhc_file);
+            last;
+        }
+    }
+    closedir $dir_h;
+
+    if (not defined $hhc_file) {
+        warn "$appname: cannot find the .hhc file\n";
+        next;
+    }
+
+    my @files;
+    open my $fh, '<', $hhc_file or do { warn "$appname: cannot open file $hhc_file for read: $!\n"; next };
+
+    while (defined(my $line = <$fh>)) {
+        if ($line =~ /^\s*<.*?param\b.*?\s+name\s*=\s*["']Local['"].*?\s+value\s*=\s*"([^\\"]*(?:\\.[^\\"]*)*)".*?>\s*$/) {
+            my $file = $1;
+            $file =~ /\.html?\z/i or next;
+            $file = uri_unescape(catdir($hhc_dir, $file));
+            -e $file or next;
+            push @files, $file;
+        }
+    }
+
+    close $fh;
+
+    system $html2pdf_command, @files, $output_file;
+}
+
+exit 0;

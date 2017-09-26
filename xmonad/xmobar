@@ -1,0 +1,26 @@
+Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+       , bgColor = "black"
+       , fgColor = "#fdeef4"
+       , position = Top
+       , lowerOnStart = True
+       , commands = [ Run Weather "LGAV" ["-t","Athens: <tempC> C","-L","18","-H","27","--normal","lightblue","--high","red","--low","#fdeef4"] 36000
+                    , Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                    , Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                    , Run Cpu ["<cpu0>","-L","3","-H","50","--normal","lightblue","--high","red"] 10
+                    , Run Cpu ["<cpu1>","-L","3","-H","50","--normal","lightblue","--high","red"] 10
+                    , Run CpuFreq ["-t", "Freq: <cpu0> <cpu1> GHz","-L","0","-H","2","-l","lightblue","-n","white","-h","red"] 50
+					, Run CoreTemp ["-t","Temp: <core0> <core1> C", "-L","40","-H","60", "-l","#fdeef4", "-n","lightblue","-h","red"] 50
+                    , Run Memory ["-t","Mem: <usedratio><fc=lightblue>%</fc>", "-L", "0", "-H", "50" , "--normal", "lightblue", "--high", "red"] 10
+                    , Run Swap [] 10
+    		        , Run Battery["-L","50","-H","75","--high","#87f717","--normal","yellow","--low","red"] 10
+    		        , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+    		        , Run StdinReader
+    		        , Run Com "sh" ["~/.xmonad/xmobar_volume.sh"] "snd1" 1
+    		        , Run Com "amixer get Master | tail -n 1 | cut -d ' ' -f6" [] 	"snd" 5
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = " %StdinReader% }{ | %cpufreq% | %cpu% %cpu% | %coretemp% | %memory% |<fc=lightblue> %snd% </fc>| %battery% "
+--       , template = " %StdinReader% }{ | %cpu% %cpu% | %coretemp% | %memory% |`<fc=#eac117> %date% </fc>| %LGAV% |<fc=lightblue> %snd% </fc>| %battery% "
+       }
+

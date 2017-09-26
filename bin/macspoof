@@ -1,0 +1,11 @@
+#!/bin/bash
+
+INTERFACE=$1
+MAC=$2 
+
+ifconfig $INTERFACE down
+ifconfig $INTERFACE hw ether $MAC
+ifconfig $INTERFACE up
+ifconfig $INTERFACE | grep HWaddr
+
+

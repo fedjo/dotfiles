@@ -1,0 +1,62 @@
+##This is a script for downloading music or videos from youtube
+##
+##invoke as "sh mp3-youtube-down.sh" or you can put it in "/usr/bin"
+##
+##Supported formats ".mp3, .mp4, .avi"
+##
+##Author Marinellis Giorgos, attribution to "Linux Inside magazine"
+
+
+#!/bin/bash
+clear
+
+#Check if youtube-dl exists in the system
+$(which youtube-dl) &> /dev/null
+
+if [ "$?" = 1 ]; then
+echo "youtube-dl is not installed in your system."
+exit 0
+fi
+
+echo -n "Video Address(URL): "; read youtube;
+
+filename=`youtube-dl --get-filename $youtube`
+video=`youtube-dl -e $youtube`
+
+echo -n "Do you want to download $video from youtube? [Y/n]: ";
+read answer
+ 
+if [ "$answer" = 'n' ]; then 
+echo "Bye bye..."
+exit 0
+fi
+
+echo -n "Select the format you want to download
+[1].avi
+[2].mp3
+[3].mp4
+"
+read selection
+
+echo "Downloading..."
+`youtube-dl -c $youtube 1>/tmp/youtube`
+if [ -e "*.part" ]; then
+echo "There has been a fault during downloading $video";
+echo "Check your internet connection"
+
+else
+echo "Downloading complete!"
+fi
+
+vd=`echo $video|sed -e 's/ /\_/g'`
+
+case $selection in
+1)echo "Formatting .avi.."; $(which ffmpeg) -i $filename $vd.avi 2>/dev/null;
+  rm $filename
+;;
+2)echo "Formatting .mp3.."; $(which ffmpeg) -i $filename $vd.mp3 2>/dev/null;rm $filename
+;;
+3)echo "Formatting to .mp4.."; mv $filename $vd.mp4 
+;;
+esac
+echo "Done!You are ready."

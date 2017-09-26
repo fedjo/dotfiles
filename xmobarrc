@@ -1,0 +1,30 @@
+Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+    , bgColor = "black"
+    , fgColor = "grey"
+    , position = TopW L 95
+    , lowerOnStart = True
+    , commands = [ 
+
+        --  Run Network "eth0" ["-L","0","-H","100","--normal","green","--high","red"] 10
+        Run Network "wlan0" ["-L","0","-H","100","--normal","green","--high","red"] 10
+        , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+        , Run CpuFreq ["-t", "Freq: <cpu0> <cpu1> GHz","-L","0","-H","2","-l","lightblue","-n","white","-h","red"] 50
+        , Run Memory ["-t","Mem: <used> MB"] 10
+        , Run Swap [] 10
+        , Run Date "%a %b %_d %Y %H:%M" "date" 10
+
+        --  , Run Battery["-L","50","-H","75","--high","#87f717","--normal","yellow","--low","red"] 10
+        --	,Run Weather "LGAV" ["-t","Athens: <tempC> C","-L","18","-H","27","--normal","lightblue","--high","red","--low","#fdeef4"] 36000
+
+        , Run Com "show_keyboard_layout" [] "keyb" 10
+        , Run Com "amixer get Master | tail -n 1 | cut -d ' ' -f6" [] 	"snd" 5
+
+        , Run StdinReader
+        ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        -- , template = "%StdinReader% }{%cpu% | %memory% | %eth0% - %wlan0% | %battery% | <fc=#ff0000>%date%</fc> "
+        -- , template = "%StdinReader% > %keyb%}{<fc=#ff00ff>Vol:</fc> %snd% | %cpu% | %cpufreq% | %memory% | %swap% | %wlan0% |  <fc=#ff0000>%date%</fc> "
+        , template = "%StdinReader% > %keyb%}{ %cpu% | %cpufreq% | %memory% | %swap% | %wlan0% |  <fc=#ff0000>%date%</fc> "
+}
+

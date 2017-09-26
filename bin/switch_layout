@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ `setxkbmap -print | grep xkb_symbols | awk '{print $4}' | awk -F"+" '{print $2}'` = us ] 
+then echo "EN"
+    setxkbmap gr
+else echo "GR"
+    setxkbmap us
+fi
+xmodmap /home/fedjo/.xmodmap

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+t1=$(awk -F "/" '/file/ {if (NR == 2)   print $6 }' /home/fedjo/.config/nitrogen/bg-saved.cfg) 
+t2=$(awk -F "/" '/file/ {if (NR == 7)   print $5 }' /home/fedjo/.config/nitrogen/bg-saved.cfg) 
+t3=$(awk -F "/" '/file/ {if (NR ==12)   print $6 }' /home/fedjo/.config/nitrogen/bg-saved.cfg) 
+
+echo $t1
+echo $t2
+echo $t3
+
+if [ "$1" == 'relax' ]
+    then
+        #sed -i "s/"$t1"/naked-cigar.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        #sed -i "s/"$t3"/turtle_inthesea.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        sed -i "s/"$t1"/pinkfloyd.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        startx
+else [ "$1" == 'code' ]
+        sed -i "s/"$t1"/drugs+violence.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        sed -i "s/"$t2"/girl_inthefloor.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        sed -i "s/"$t3"/naked-cigar.jpg/g" /home/fedjo/.config/nitrogen/bg-saved.cfg
+        startx
+fi
