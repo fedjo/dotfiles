@@ -4,6 +4,9 @@ URxvt.colorBD:      #d7d7d7
 URxvt.colorUL:      #87afd7
 URxvt.urgentOnBell: true
 
+!Geometry
+URxvt.geometry: 129x37
+
 URxvt*font: xft:Monospace:pixelsize=14
 
 URxvt*letterSpace: -2
@@ -117,4 +120,8 @@ URxvt.tabbed_new.tabsel-fg: 1
 URxvt.tabbed_new.tabsel-bg: 8
 URxvt.tabbed_new.tab-fg:    0
 URxvt.tabbed_new.tab-bg:    8
+
+URxvt.tabbed.tabcmds.1: N|shell
+URxvt.tabbed.tabcmds.2: M|root|su -
+URxvt.tabbed.tabcmds.3: S|htop|htop
 
