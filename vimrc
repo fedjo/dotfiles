@@ -3,27 +3,29 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
+Plugin 'leafgarland/typescript-vim'
+call plug#begin('~/.vim/plugged')
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
+call plug#end()
+set rtp+=~/.fzf
 "Plugin 'Raimondi/delimitMate'
 "Plugin 'nathanaelkane/vim-indent-guides'
-"Plugin 'simnalamburt/vim-mundo'
+Plugin 'simnalamburt/vim-mundo'
 "Plugin 'airblade/vim-gitgutter'
 "Plugin 'junegunn/vim-easy-align'
-"Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'hynek/vim-python-pep8-indent'
 
-"Plugin 'jpo/vim-railscasts-theme'
+Plugin 'jpo/vim-railscasts-theme'
 Plugin 'vim-airline/vim-airline' | Plugin 'vim-airline/vim-airline-themes'
-"Plugin 'mattn/emmet-vim'
-"Plugin 'scrooloose/nerdTree'
-"Plugin 'SirVer/ultisnips'
-"Plugin 'honza/vim-snippets'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 "Plugin 'Valloric/YouCompleteMe', { 'do': 'python3 install.py --all' }
 "Plugin 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 "Plugin 'Valloric/MatchTagAlways'
@@ -31,28 +33,27 @@ Plugin 'vim-airline/vim-airline' | Plugin 'vim-airline/vim-airline-themes'
 
 "Plugin 'tpope/vim-commentary'
 "Plugin 'tpope/vim-surround'
-"Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 "Plugin 'tpope/vim-ragtag'
 "Plugin 'tpope/vim-sensible'
 
-
-Plugin 'jpo/vim-railscasts-theme'
-Plugin 'sjl/gundo.vim'
+"Plugin 'davidhalter/jedi-vim'
+"Plugin 'fatih/vim-go'
+Plugin 'ervandew/supertab'
+" Plugin 'psf/black'
+"Plugin 'sjl/gundo.vim'
 Plugin 'scrooloose/nerdTree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Plugin 'rking/ag.vim'
 Plugin 'kien/ctrlp.vim'
-"Plugin 'vim-airline/vim-airline'
-Plugin 'mattn/emmet-vim'
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'mattn/emmet-vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-commentary'
-" Plugin 'Valloric/YouCompleteMe'
 " Plugin 'tpope/vim-surround'
 " Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-ragtag'
 " Plugin 'tpope/vim-endwise'
 " Plugin 'vim-ruby/vim-ruby'
-" Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
 " Plugin 'scrooloose/syntastic'
 
 " TODO list highlight
@@ -111,7 +112,8 @@ if has("autocmd")
 endif
 
 set cursorline " highlight current line
-set colorcolumn=80,120 " highlight columns 80 and 120
+" set colorcolumn=80,120 " highlight columns 80 and 120
+set colorcolumn=88,120 " highlight columns 80 and 120
 
 set ignorecase
 set smartcase
@@ -201,7 +203,8 @@ nnoremap <leader>bq :bp <BAR> bd #<CR>
   let g:ymc_complete_in_comments = 1 " Completion in comments
 
 " NerdTree {{{
-  map <c-n> :NERDTreeToggle<CR>
+  "nnoremap <leader>l :bnext<CR>
+  map <leader>n :NERDTreeToggle<CR>
   let NERDTreeIgnore = ['\.pyc$', 'build', 'venv', 'egg', 'egg-info/', 'dist', 'docs']
 " }}}
 
@@ -213,7 +216,7 @@ nnoremap <leader>bq :bp <BAR> bd #<CR>
   let g:gitgutter_diff_args = '--ignore-space-at-eol'
 
 " Ultisnips
-  let g:UltiSnipsSnippetsDir = '~/.nvim/UltiSnips'
+  let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
   let g:UltiSnipsEditSplit = 'vertical'
   let g:UltiSnipsListSnippets = '<nop>'
   let g:UltiSnipsExpandTrigger = '<c-j>'
@@ -223,6 +226,12 @@ nnoremap <leader>bq :bp <BAR> bd #<CR>
 
 " Mundo
   nnoremap <leader>u :MundoToggle<CR>
+  " Enable persistent undo so that undo history persists across vim sessions
+  set undofile
+  set undodir=~/.vim/undo
+
+" Call Gundo tree
+" nnoremap <F5> :GundoToggle<CR>
 
 " vim-gutentags
   let g:gutentags_exclude = [
