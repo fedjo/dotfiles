@@ -1,4 +1,4 @@
-SHELL := zsh
+SHELL := bash
 
 .PHONY: all
 all: bin usr dotfiles etc ## Installs the bin and etc directory files and the dotfiles.
@@ -6,10 +6,10 @@ all: bin usr dotfiles etc ## Installs the bin and etc directory files and the do
 .PHONY: bin
 bin: ## Installs the bin directory files.
 	# add aliases for things in bin
-	mkdir -p $HOME/bin
-	for file in $(shell find $(CURDIR)/bin -type f -not -name ".*.swp"); do \
+	mkdir -p $$HOME/bin;
+	for file in $(shell find $(PWD)/bin -type f -not -name ".*.asc"); do \
 		f=$$(basename $$file); \
-		sudo ln -sf $$file $HOME/bin/$$f; \
+		ln -sf $$file $$HOME/bin/$$f; \
 	done
 
 .PHONY: help
