@@ -1,4 +1,0 @@
-#!/bin/bash
-
-ifconfig $1 | grep "inet addr" | gawk -F: '{printf $2}'  | gawk '{printf substr($2,5)}'
-

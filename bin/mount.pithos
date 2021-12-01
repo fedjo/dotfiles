@@ -1,1 +1,0 @@
-su -c "mount https://pithos.grnet.gr/webdav"

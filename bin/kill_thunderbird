@@ -1,4 +1,0 @@
-#!/bin/bash
-
-killall -9 davmail
-killall -9 thunderbird

@@ -1,0 +1,129 @@
+---
+- name: Install basic utils for personal PC
+  hosts: homes
+  become: yes
+  become_method: sudo
+
+  vars:
+    pip_install_packages:
+      - name: docker-compose
+    docker_users:
+      - "{{ user }}"
+  # TODO: put tasks also into roles, in order to have the right sequence
+  # first user creation, then docker installation
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+
+  tasks:
+    - name: Set the machine's hostname
+      hostname:
+        name: "{{ pc_hostname }}"
+      when: pc_hostname != ""
+
+    - name: Install basic packages
+      block:
+        - name: Install basic packages
+          apt:
+            pkg:
+              - zsh
+              - git
+              - gnupg
+              - vim
+              - rxvt-unicode
+              - tmux
+              - fzf
+              - tmate
+              - keepassxc
+              - openvpn
+              - wireguard
+              - x2goclient
+            state: latest
+            update_cache: true
+
+        - name: Set ZSH default shell
+          user:
+            name: "{{ user }}"
+            shell: /usr/bin/zsh
+            state: present
+
+
+    - name: Install tmux.conf from https://github.com/gpakosz/.tmux
+      block:
+        - name: Cloning https://github.com/gpakosz/.tmux
+          git:
+            repo: https://github.com/gpakosz/.tmux.git
+            dest: $HOME/.tmux
+            clone: yes
+            update: yes
+
+        - name: Create symbolic link to `gpakosz/.tmux.conf`
+          file:
+            src: $HOME/.tmux/.tmux.conf
+            dest: $HOME/.tmux.conf
+            state: link
+
+        - name: Copy `gpakosz/.tmux.conf.local` to $HOME
+          copy:
+            src: $HOME/.tmux/.tmux.conf.local
+            remote_src: true
+            dest: $HOME
+      become_user: "{{ user }}"
+      tags: tmux
+
+    - name: Install `zprezto` from https://github.com/sorin-ionescu/prezto
+      block:
+        - name: Cloning https://github.com/sorin-ionescu/prezto
+          git:
+            repo: https://github.com/sorin-ionescu/prezto.git
+            dest: $HOME/.zprezto
+            clone: yes
+            recursive: yes
+            update: yes
+
+        - name: Create symbolic link to `gpakosz/.tmux.conf`
+          file:
+            src: $HOME/.tmux/.tmux.conf
+            dest: $HOME/.tmux.conf
+            state: link
+
+        - name: Copy `gpakosz/.tmux.conf.local` to $HOME
+          copy:
+            src: $HOME/.tmux/.tmux.conf.local
+            remote_src: true
+            dest: $HOME
+      become_user: "{{ user }}"
+      tags: tmux
+
+    # - name: Creating user "{{ user }}" with admin access
+    #   block:
+
+    #   - name: create group '"{{ user }}"'
+    #     group:
+    #       name: "{{ user }}"
+    #       state: present
+
+    #   - name: create user in group
+    #     user:
+    #       name: "{{ user }}"
+    #       password: "{{ password | password_hash('sha512') }}"
+    #       groups: "{{ user }}"
+    #       shell: /bin/bash
+    #       append: yes
+    #       createhome: yes
+    #       state: present
+
+    - name: Update base system
+      block:
+      - name: Update apt
+        apt: update_cache=yes
+
+      - name: Install avahi ddns service
+        apt:
+          name: avahi-daemon
+          state: present
+
+      - name: Restart avahi to reflect changed hostname
+        service:
+          name: avahi-daemon
+          state: restarted

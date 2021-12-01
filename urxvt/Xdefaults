@@ -5,7 +5,7 @@ URxvt.colorUL:      #87afd7
 URxvt.urgentOnBell: true
 
 !Geometry
-URxvt.geometry: 129x37
+URxvt.geometry: 450x50
 
 URxvt*font: xft:Monospace:pixelsize=14
 
@@ -81,10 +81,6 @@ URxvt*letterSpace: -2
 
 
 
-!! Map <Alt>-c to copy and <Alt>-v to paste
-URxvt.keysym.M-c:   perl:clipboard:copy
-URxvt.keysym.M-v:   perl:clipboard:paste
-
 ! Tab binding not to interfear with vim
 
 !! Scrolling
@@ -106,22 +102,49 @@ URxvt.matcher.rend.0: Uline Bold fg5
 !!these three lines enable clicking on links to open them ;)
 !! if you want to enable tab support, append ,tabbed to the next line
 !! then use shift+down arrow to create tabs and shift+{left,right} arrows to switch between them
-URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine,tabbed, resize-font,selection-to-clipboard
+! URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine,tabbed, resize-font,selection-to-clipboard
+URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine, resize-font,selection-to-clipboard, keyboard-select, clipboard
+URxvt.perl-ext: tabbed
 URxvt*matcher.button: 1
 !! dont forget to change this to your favorite browser
 URxvt*urlLauncher: firefox
 
+!URxvt.keysym.M-j: Up_Arrow
+!URxvt.keysym.M-k: \033[1;5B
+
+
+
+!! Map <Alt>-c to copy and <Alt>-v to paste
+URxvt.copyCommand: xclip -i -selection clipboard
+URxvt.pasteCommand: xclip -o -selection clipboard
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+
+!! Other mappings
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+
+!! URxvt.keysym.Shift-Down: perl:tabbed:new_tab
+
 !! Configuration for tabbed_new plugin
-URxvt.tabbed_new.tabren-bg: 3
-URxvt.tabbed_new.tabdiv-fg: 8
-URxvt.tabbed_new.tabbar-fg: 8
-URxvt.tabbed_new.tabbar-bg: 0
-URxvt.tabbed_new.tabsel-fg: 1
-URxvt.tabbed_new.tabsel-bg: 8
-URxvt.tabbed_new.tab-fg:    0
-URxvt.tabbed_new.tab-bg:    8
+/* URxvt.tabbed_new.tabren-bg: 3 */
+/* URxvt.tabbed_new.tabdiv-fg: 8 */
+/* URxvt.tabbed_new.tabbar-fg: 8 */
+/* URxvt.tabbed_new.tabbar-bg: 0 */
+/* URxvt.tabbed_new.tabsel-fg: 1 */
+/* URxvt.tabbed_new.tabsel-bg: 8 */
+/* URxvt.tabbed_new.tab-fg:    0 */
+/* URxvt.tabbed_new.tab-bg:    8 */
+
+!! Configuration for tabbedx plugin
+!! https://github.com/gryf/tabbed
+URxvt.tabbed.disable-shift-down: false
+URxvt.tabbed.new-button: false
 
 URxvt.tabbed.tabcmds.1: N|shell
-URxvt.tabbed.tabcmds.2: M|root|su -
+URxvt.tabbed.tabcmds.2: R|root|su -
 URxvt.tabbed.tabcmds.3: S|htop|htop
+URxvt.tabbed.tabcmds.4: G|nvtop|nvtop
+URxvt.tabbed.tabcmds.5: H|qnvsm|qnvsm
 
+URxvt.tabbed.session: N|S|R
