@@ -1,0 +1,480 @@
+let SessionLoad = 1
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+inoremap <silent> <Plug>(fzf-maps-i) :call fzf#vim#maps('i', 0)
+inoremap <expr> <Plug>(fzf-complete-buffer-line) fzf#vim#complete#buffer_line()
+inoremap <expr> <Plug>(fzf-complete-line) fzf#vim#complete#line()
+inoremap <expr> <Plug>(fzf-complete-file-ag) fzf#vim#complete#path('ag -l -g ""')
+inoremap <expr> <Plug>(fzf-complete-file) fzf#vim#complete#path("find . -path '*/\.*' -prune -o -type f -print -o -type l -print | sed 's:^..::'")
+inoremap <expr> <Plug>(fzf-complete-path) fzf#vim#complete#path("find . -path '*/\.*' -prune -o -print | sed '1d;s:^..::'")
+inoremap <expr> <Plug>(fzf-complete-word) fzf#vim#complete#word()
+inoremap <silent> <SNR>52_AutoPairsReturn =AutoPairsReturn()
+imap <S-Tab> <Plug>SuperTabBackward
+inoremap <C-Tab> 	
+snoremap <silent>  "_c
+xnoremap <silent> <NL> :call UltiSnips#SaveLastVisualSelection()gvs
+snoremap <silent> <NL> :call UltiSnips#ExpandSnippetOrJump()
+nnoremap <silent>  :CtrlP
+snoremap  "_c
+nnoremap <silent>  g` :call ReviewLastCommit()
+nnoremap <silent>  gQ :Gwq!
+nnoremap <silent>  gq :Gwq
+nnoremap <silent>  gW :Gwrite!
+nnoremap <silent>  gw :Gwrite
+nnoremap <silent>  gR :Gread 
+nnoremap <silent>  gr :Gread
+nnoremap <silent>  gE :Gedit 
+nnoremap <silent>  ge :Gedit
+nnoremap <silent>  gb :Gblame
+nnoremap <silent>  gc :Gcommit
+nnoremap <silent>  gd :Gdiff
+nnoremap <silent>  gs :Gstatus
+nnoremap <silent>  ft :Filetypes
+nnoremap <silent>  ga :BCommits
+nnoremap <silent>  gl :Commits
+nnoremap <silent>  . :AgIn
+nnoremap <silent>  / :execute 'Ag ' . input('Ag/')
+nnoremap <silent>  ? :History
+nnoremap <silent>  O :Tags
+nnoremap <silent>  o :BTags
+nnoremap <silent>  ; :BLines
+nnoremap <silent>  A :Windows
+nnoremap <silent>  a :Buffers
+nnoremap <silent>    :Files
+nnoremap  t! :GutentagsUpdate!
+nnoremap  u :MundoToggle
+nnoremap  bq :bp | bd #
+nnoremap  h :bprevious
+nnoremap  l :bnext
+map  n :NERDTreeToggle
+nnoremap  w :w
+nnoremap  z za
+map  q :nohl
+nnoremap $ <Nop>
+snoremap <silent> <nop> :call UltiSnips#ListSnippets()
+nnoremap B ^
+nnoremap E $
+xnoremap <silent> K :call SearchVisualSelectionWithAg()
+nnoremap <silent> K :call SearchWordWithAg()
+nmap Q Q
+xmap Q Q
+omap Q Q
+nmap W W
+xmap W W
+omap W W
+nnoremap ^ <Nop>
+xmap gx <Plug>NetrwBrowseXVis
+nmap gx <Plug>NetrwBrowseX
+nmap gcu <Plug>Commentary<Plug>Commentary
+nmap gcc <Plug>CommentaryLine
+omap gc <Plug>Commentary
+nmap gc <Plug>Commentary
+xmap gc <Plug>Commentary
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+nnoremap gV `[v`]
+nnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+xnoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+onoremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+xnoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+onoremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+nmap q q
+xmap q q
+omap q q
+nnoremap <Plug>(-fzf-:) :
+nnoremap <Plug>(-fzf-/) /
+nnoremap <Plug>(-fzf-vim-do) :execute g:__fzf_command
+nnoremap <silent> <Plug>(kite-docs) :call kite#docs#docs()
+vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
+nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())
+onoremap <silent> <Plug>(fzf-maps-o) :call fzf#vim#maps('o', 0)
+xnoremap <silent> <Plug>(fzf-maps-x) :call fzf#vim#maps('x', 0)
+nnoremap <silent> <Plug>(fzf-maps-n) :call fzf#vim#maps('n', 0)
+nmap <silent> <Plug>CommentaryUndo :echoerr "Change your <Plug>CommentaryUndo map to <Plug>Commentary<Plug>Commentary"
+snoremap <silent> <Del> "_c
+snoremap <silent> <BS> "_c
+imap 	 <Plug>SuperTabForward
+inoremap <silent> <NL> =UltiSnips#ExpandSnippetOrJump()
+imap  <Plug>(fzf-complete-line)
+imap  <Plug>(fzf-complete-file-ag)
+imap ,. -
+imap ,, =
+inoremap <silent> <nop> =UltiSnips#ListSnippets()
+nmap ζ z
+xmap ζ z
+omap ζ z
+nmap θ u
+xmap θ u
+omap θ u
+nmap ο o
+xmap ο o
+omap ο o
+nmap ν n
+xmap ν n
+omap ν n
+nmap μ m
+xmap μ m
+omap μ m
+nmap λ l
+xmap λ l
+omap λ l
+nmap κ k
+xmap κ k
+omap κ k
+nmap ξ j
+xmap ξ j
+omap ξ j
+nmap ι i
+xmap ι i
+omap ι i
+nmap η h
+xmap η h
+omap η h
+nmap γ g
+xmap γ g
+omap γ g
+nmap ε e
+xmap ε e
+omap ε e
+nmap δ d
+xmap δ d
+omap δ d
+nmap β b
+xmap β b
+omap β b
+nmap α a
+xmap α a
+omap α a
+nmap Ζ Z
+xmap Ζ Z
+omap Ζ Z
+nmap Υ Y
+xmap Υ Y
+omap Υ Y
+nmap Χ X
+xmap Χ X
+omap Χ X
+nmap Ω V
+xmap Ω V
+omap Ω V
+nmap Θ U
+xmap Θ U
+omap Θ U
+nmap Τ T
+xmap Τ T
+omap Τ T
+nmap Σ S
+xmap Σ S
+omap Σ S
+nmap Ρ R
+xmap Ρ R
+omap Ρ R
+nmap Π P
+xmap Π P
+omap Π P
+nmap Ο O
+xmap Ο O
+omap Ο O
+nmap Ν N
+xmap Ν N
+omap Ν N
+nmap Μ M
+xmap Μ M
+omap Μ M
+nmap Λ L
+xmap Λ L
+omap Λ L
+nmap Κ K
+xmap Κ K
+omap Κ K
+nmap Ξ J
+xmap Ξ J
+omap Ξ J
+nmap Ι I
+xmap Ι I
+omap Ι I
+nmap Η H
+xmap Η H
+omap Η H
+nmap Γ G
+xmap Γ G
+omap Γ G
+nmap Φ F
+xmap Φ F
+omap Φ F
+nmap Ε E
+xmap Ε E
+omap Ε E
+nmap Δ D
+xmap Δ D
+omap Δ D
+nmap Ψ C
+xmap Ψ C
+omap Ψ C
+nmap Β B
+xmap Β B
+omap Β B
+nmap Α A
+xmap Α A
+omap Α A
+nmap υ y
+xmap υ y
+omap υ y
+nmap χ x
+xmap χ x
+omap χ x
+nmap ς w
+xmap ς w
+omap ς w
+nmap ω v
+xmap ω v
+omap ω v
+nmap τ t
+xmap τ t
+omap τ t
+nmap σ s
+xmap σ s
+omap σ s
+nmap ρ r
+xmap ρ r
+omap ρ r
+nmap π p
+xmap π p
+omap π p
+nmap φ f
+xmap φ f
+omap φ f
+nmap ψ c
+xmap ψ c
+omap ψ c
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set background=dark
+set backspace=indent,eol,start
+set completeopt=menuone,noinsert
+set expandtab
+set fileencodings=ucs-bom,utf-8,default,latin1
+set foldlevelstart=10
+set grepprg=grep\ -nH\ $*
+set helplang=en
+set hidden
+set ignorecase
+set laststatus=2
+set operatorfunc=<SNR>53_go
+set printoptions=paper:a4
+set ruler
+set runtimepath=~/.vim,~/.vim/pack/kite/start/vim-plugin,~/.vim/bundle/Vundle.vim,~/.vim/bundle/typescript-vim,~/.vim/bundle/fzf,~/.vim/bundle/vim-mundo,~/.vim/bundle/vim-python-pep8-indent,~/.vim/bundle/vim-railscasts-theme,~/.vim/bundle/vim-airline,~/.vim/bundle/vim-airline-themes,~/.vim/bundle/ultisnips,~/.vim/bundle/vim-snippets,~/.vim/bundle/vim-fugitive,~/.vim/bundle/supertab,~/.vim/bundle/nerdTree,~/.vim/bundle/nerdtree-git-plugin,~/.vim/bundle/ctrlp.vim,~/.vim/bundle/auto-pairs,~/.vim/bundle/vim-commentary,~/.vim/bundle/vim-todo,~/.vim/plugged/fzf.vim,/var/lib/vim/addons,/usr/share/vim/vimfiles,/usr/share/vim/vim80,/usr/share/vim/vimfiles/after,/var/lib/vim/addons/after,~/.vim/after,~/.vim/bundle/Vundle.vim,~/.fzf,~/.vim/bundle/Vundle.vim/after,~/.vim/bundle/typescript-vim/after,~/.vim/bundle/fzf/after,~/.vim/bundle/vim-mundo/after,~/.vim/bundle/vim-python-pep8-indent/after,~/.vim/bundle/vim-railscasts-theme/after,~/.vim/bundle/vim-airline/after,~/.vim/bundle/vim-airline-themes/after,~/.vim/bundle/ultisnips/after,~/.vim/bundle/vim-snippets/after,~/.vim/bundle/vim-fugitive/after,~/.vim/bundle/supertab/after,~/.vim/bundle/nerdTree/after,~/.vim/bundle/nerdtree-git-plugin/after,~/.vim/bundle/ctrlp.vim/after,~/.vim/bundle/auto-pairs/after,~/.vim/bundle/vim-commentary/after,~/.vim/bundle/vim-todo/after
+set shiftwidth=4
+set showcmd
+set showtabline=2
+set smartcase
+set softtabstop=4
+set statusline=%{gutentags#statusline()}
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set tabline=%!airline#extensions#tabline#get()
+set tabstop=4
+set undodir=~/.vim/undo
+set undofile
+set wildignore=*.pyc
+set window=57
+set nowritebackup
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+silent only
+cd ~/Documents/sennder-assignment/ghibli-api
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +24 src/app.py
+badd +2 src/models.py
+badd +18 src/config.py
+badd +29 src/views.py
+badd +5 src/__init__.py
+badd +2 src/utils/utils.py
+badd +2 src/schemas.py
+badd +1 src/utils/enums.py
+argglobal
+silent! argdel *
+$argadd src/app.py
+$argadd src/models.py
+$argadd src/config.py
+edit src/utils/enums.py
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winheight=1 winminwidth=1 winwidth=1
+argglobal
+if bufexists('src/utils/enums.py') | buffer src/utils/enums.py | else | edit src/utils/enums.py | endif
+let s:cpo_save=&cpo
+set cpo&vim
+inoremap <buffer> <silent> <BS> =AutoPairsDelete()
+inoremap <buffer> <silent> § =AutoPairsMoveCharacter('''')
+inoremap <buffer> <silent> ¢ =AutoPairsMoveCharacter('"')
+inoremap <buffer> <silent> © =AutoPairsMoveCharacter(')')
+inoremap <buffer> <silent> ¨ =AutoPairsMoveCharacter('(')
+inoremap <buffer> <silent> î :call AutoPairsJump()a
+inoremap <buffer> <silent> <expr> ð AutoPairsToggle()
+inoremap <buffer> <silent> â =AutoPairsBackInsert()
+inoremap <buffer> <silent> å =AutoPairsFastWrap()
+inoremap <buffer> <silent> ý =AutoPairsMoveCharacter('}')
+inoremap <buffer> <silent> û =AutoPairsMoveCharacter('{')
+inoremap <buffer> <silent> Ý =AutoPairsMoveCharacter(']')
+inoremap <buffer> <silent> Û =AutoPairsMoveCharacter('[')
+inoremap <buffer> <silent>  =AutoPairsDelete()
+inoremap <buffer> <silent>   =AutoPairsSpace()
+inoremap <buffer> <silent> " =AutoPairsInsert('"')
+inoremap <buffer> <silent> ' =AutoPairsInsert('''')
+inoremap <buffer> <silent> ( =AutoPairsInsert('(')
+inoremap <buffer> <silent> ) =AutoPairsInsert(')')
+noremap <buffer> <silent> î :call AutoPairsJump()
+noremap <buffer> <silent> ð :call AutoPairsToggle()
+inoremap <buffer> <silent> [ =AutoPairsInsert('[')
+inoremap <buffer> <silent> ] =AutoPairsInsert(']')
+inoremap <buffer> <silent> ` =AutoPairsInsert('`')
+inoremap <buffer> <silent> { =AutoPairsInsert('{')
+inoremap <buffer> <silent> } =AutoPairsInsert('}')
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal backupcopy=
+setlocal balloonexpr=
+setlocal nobinary
+setlocal nobreakindent
+setlocal breakindentopt=
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),:,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+set colorcolumn=88,120
+setlocal colorcolumn=88,120
+setlocal comments=b:#,fb:-
+setlocal commentstring=#\ %s
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'python.django'
+setlocal filetype=python.django
+endif
+setlocal fixendofline
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=10
+setlocal foldmarker={{{,}}}
+set foldmethod=indent
+setlocal foldmethod=indent
+setlocal foldminlines=1
+set foldnestmax=10
+setlocal foldnestmax=10
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal formatprg=
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=-1
+setlocal include=^\\s*\\(from\\|import\\)
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+setlocal indentexpr=GetPythonPEPIndent(v:lnum)
+setlocal indentkeys=!^F,o,O,<:>,0),0],0},=elif,=except
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=pydoc
+setlocal nolinebreak
+setlocal nolisp
+setlocal lispwords=
+setlocal nolist
+setlocal makeencoding=
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=bin,octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=python3complete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal signcolumn=auto
+setlocal nosmartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%!airline#statusline(1)
+setlocal suffixesadd=.py
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'python.django'
+setlocal syntax=python.django
+endif
+setlocal tabstop=4
+setlocal tagcase=
+setlocal tags=
+setlocal termkey=
+setlocal termsize=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal undolevels=-123456
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
+tabnext 1
+if exists('s:wipebuf')
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 shortmess=filnxtToO
+set winminheight=1 winminwidth=1
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :
