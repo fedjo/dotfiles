@@ -90,7 +90,6 @@ autoload -U compinit && compinit -u
 
 # OPAM configuration
 . /home/lebowski/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -119,11 +118,6 @@ unset __conda_setup
 export PYPI_HOST_IP=35.242.226.235
 export PYPIUSER=deevi0
 export PYPIPASS=deevi02018
-
-# ASDF
-# https://github.com/asdf-vm/asdf
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
 
 # zsh-kubectl-prompt
 # https://github.com/superbrothers/zsh-kubectl-prompt

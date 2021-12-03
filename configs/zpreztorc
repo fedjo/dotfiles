@@ -16,7 +16,7 @@
 zstyle ':prezto:*:*' color 'yes'
 
 # Add additional directories to load prezto modules from
-zstyle ':prezto:load' pmodule-dirs $HOME/.zprezto-contrib
+#zstyle ':prezto:load' pmodule-dirs $HOME/.zprezto-contrib
 
 # Allow module overrides when pmodule-dirs causes module name collisions
 # zstyle ':prezto:load' pmodule-allow-overrides 'yes'
@@ -42,13 +42,13 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
-  'contrib-prompt' \
+  # 'contrib-prompt' \
   'prompt' \
   'syntax-highlighting' \
   'history-substring-search' \
   'docker' \
-  'kubectl' \
-  'zsh-kubectl-prompt' \
+  # 'kubectl' \
+  # 'zsh-kubectl-prompt' \
 
 #
 # Autosuggestions
