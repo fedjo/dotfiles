@@ -1,0 +1,137 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Customize to your needs...
+#
+# Aliases
+#
+alias tree="pwd; tree"
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+alias uuid="python -c 'import sys,uuid; sys.stdout.write(str(uuid.uuid4()))' | pbcopy && pbpaste && echo"
+alias bt="batcat"
+# alias ipy="python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+
+# Variables
+#
+# virtualenv and virtualenvwrapper
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
+export WORKON_HOME=$HOME/.venvs
+export PROJECT_HOME=$HOME/deevio
+source /usr/local/bin/virtualenvwrapper.sh
+
+export PATH=/home/yiorgos/bin:/home/yiorgos/balena-cli:/home/yiorgos/wrk:/home/yiorgos/go/bin:$PATH
+# Small hack to fix problem with python runtime and install path of openssl 1.1.1
+export GOOGLE_APPLICATION_CREDENTIALS="/home/yiorgos/Downloads/gcloud-keys/deevio-platform-storage-auth0.json"
+
+# less with color
+export LESS='-R'
+export LESSOPEN='|~/bin/lessfilter %s'
+
+# Functions
+#
+# Tmate
+TMATE_PAIR_NAME="$(whoami)-pair"
+TMATE_SOCKET_LOCATION="/tmp/tmate-pair.sock"
+TMATE_TMUX_SESSION="/tmp/tmate-tmux-session"
+# Get current tmate connection url
+tmate-url() {
+  url="$(tmate -S $TMATE_SOCKET_LOCATION display -p '#{tmate_ssh}')"
+  echo "$url" | tr -d '\n' | pbcopy
+  echo "Copied tmate url for $TMATE_PAIR_NAME:"
+  echo "$url"
+}
+
+# Start a new tmate pair session if one doesn't already exist
+# If creating a new session, the first argument can be an existing TMUX session to connect to automatically
+tmate-pair() {
+  if [ ! -e "$TMATE_SOCKET_LOCATION" ]; then
+    tmate -S "$TMATE_SOCKET_LOCATION" -f "$HOME/.tmate.conf" new-session -d -s "$TMATE_PAIR_NAME"
+
+    while [ -z "$url" ]; do
+      url="$(tmate -S $TMATE_SOCKET_LOCATION display -p '#{tmate_ssh}')"
+    done
+    tmate-url
+    sleep 1
+
+    if [ -n "$1" ]; then
+      echo $1 > $TMATE_TMUX_SESSION
+      tmate -S "$TMATE_SOCKET_LOCATION" send -t "$TMATE_PAIR_NAME" "TMUX='' tmux attach-session -t $1" ENTER
+    fi
+  fi
+  tmate -S "$TMATE_SOCKET_LOCATION" attach-session -t "$TMATE_PAIR_NAME"
+}
+
+# Close the pair because security
+tmate-unpair() {
+  if [ -e "$TMATE_SOCKET_LOCATION" ]; then
+    if [ -e "$TMATE_SOCKET_LOCATION" ]; then
+      tmux detach -s $(cat $TMATE_TMUX_SESSION)
+      rm -f $TMATE_TMUX_SESSION
+    fi
+
+    tmate -S "$TMATE_SOCKET_LOCATION" kill-session -t "$TMATE_PAIR_NAME"
+    echo "Killed session $TMATE_PAIR_NAME"
+  else
+    echo "Session already killed"
+   fi
+ }
+
+# Autojump
+[[ -s /home/yiorgos/.autojump/etc/profile.d/autojump.sh ]] && source /home/yiorgos/.autojump/etc/profile.d/autojump.sh
+
+autoload -U compinit && compinit -u
+
+
+
+# OPAM configuration
+. /home/lebowski/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+if [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
+
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/yiorgos/Downloads/google-cloud-sdk-301.0.0-linux-x86_64/google-cloud-sdk/path.zsh.inc' ]; then . '/home/yiorgos/Downloads/google-cloud-sdk-301.0.0-linux-x86_64/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/yiorgos/Downloads/google-cloud-sdk-301.0.0-linux-x86_64/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/yiorgos/Downloads/google-cloud-sdk-301.0.0-linux-x86_64/google-cloud-sdk/completion.zsh.inc'; fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/yiorgos/.miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/yiorgos/.miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/yiorgos/.miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/yiorgos/.miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export PYPI_HOST_IP=35.242.226.235
+export PYPIUSER=deevi0
+export PYPIPASS=deevi02018
+
+# ASDF
+# https://github.com/asdf-vm/asdf
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
+# zsh-kubectl-prompt
+# https://github.com/superbrothers/zsh-kubectl-prompt
+#RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
+#
+#eval "$(starship init zsh)"
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
