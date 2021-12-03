@@ -42,13 +42,14 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
-  # 'contrib-prompt' \
   'prompt' \
   'syntax-highlighting' \
   'history-substring-search' \
   'docker' \
   # 'kubectl' \
   # 'zsh-kubectl-prompt' \
+  # To enable it has to go before  `prompt` module
+  # 'contrib-prompt' \
 
 #
 # Autosuggestions
