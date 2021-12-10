@@ -1,16 +1,26 @@
-SHELL := bash
+SHELL := zsh
 
 .PHONY: all
-all: bin usr dotfiles etc ## Installs the bin and etc directory files and the dotfiles.
+all: bin dotfiles ## Installs the bin and etc directory files and the dotfiles.
 
 .PHONY: bin
 bin: ## Installs the bin directory files.
 	# add aliases for things in bin
 	mkdir -p $$HOME/bin;
-	for file in $(shell find $(PWD)/bin -type f -not -name ".*.asc"); do \
+	for file in $(shell find $(shell pwd)/bin -type f -not -name ".*.asc"); do \
 		f=$$(basename $$file); \
 		ln -sf $$file $$HOME/bin/$$f; \
 	done
+
+.PHONY: dotfiles
+dotfiles: ## Installs the dotfiles.
+	# add aliases for dotfiles
+	for file in $(shell find $(shell pwd)/configs -maxdepth 1 -name "*" -not -name "configs" -not -name "vim"); do \
+		f=$$(basename $$file); \
+		ln -sfn $$file $$HOME/.$$f; \
+	done; \
+	xrdb -merge $(HOME)/.Xdefaults || true
+	xrdb -merge $(HOME)/.Xresources || true
 
 .PHONY: help
 help:
