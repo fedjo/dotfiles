@@ -1,1 +1,6 @@
 *.lock
+*.rev
+*.asc
+*.sw*
+*.kdbx
+*.vim
