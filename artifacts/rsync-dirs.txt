@@ -1,0 +1,18 @@
+Pictures/
+Documents/
+Downloads/
+Videos/
+Music/
+Desktop/
+Notebooks/
+Virtualbox\ \VMs/
+
+.gnupg/
+.ssh/
+
+.thunderbird/
+.mozilla/
+.fedjo/
+.code/
+
+.config/spotify/
