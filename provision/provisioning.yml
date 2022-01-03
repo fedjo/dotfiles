@@ -30,9 +30,9 @@
               - git
               - gnupg
               - vim
+              - silversearcher-ag
               - rxvt-unicode
               - tmux
-              - fzf
               - tmate
               - keepassxc
               - openvpn
@@ -47,6 +47,20 @@
             shell: /usr/bin/zsh
             state: present
 
+    - name: Install `fzf` from https://github.com/junegunn/fzf
+      block:
+        - name: Cloning https://github.com/junegunn/fzf.git
+          git:
+            repo: https://github.com/junegunn/fzf.git
+            dest: $HOME/.fzf
+            clone: yes
+            update: yes
+
+        - name: Installing `fzf`
+          command: bash $HOME/.fzf/install --key-bindings --completion --no-update-rc
+
+      become_user: "{{ user }}"
+      tags: fzf
 
     - name: Install tmux.conf from https://github.com/gpakosz/.tmux
       block:
@@ -93,7 +107,80 @@
             remote_src: true
             dest: $HOME
       become_user: "{{ user }}"
-      tags: tmux
+      tags: zprezto
+
+    - name: Install `dotfiles` from https://github.com/fedjo/dotfiles
+      block:
+        - name: Cloning https://github.com/fedjo/dotfiles.git
+          git:
+            repo: https://github.com/fedjo/dotfiles.git
+            dest: $HOME/dotfiles
+            clone: yes
+            recursive: yes
+            update: yes
+
+        # TODO:Debug task remove after success
+        - name: DEBUG Copy Makefile to remote host
+          copy:
+            src: ../Makefile
+            dest: $HOME/dotfiles/Makefile
+
+        - name: Install config files
+          command: make all
+          args:
+            chdir: $HOME/dotfiles
+
+        - name: Install vim `Vundle`
+          git:
+            repo: https://github.com/VundleVim/Vundle.vim.git
+            dest: $HOME/.vim/bundle/Vundle.vim
+            clone: yes
+            update: yes
+
+        - name: Install `vim` plugins
+          command: vim -E -s -c "source $HOME/.vimrc" -c PluginInstall -c qa!
+          ignore_errors: yes
+      become_user: "{{ user }}"
+      tags: dotfiles
+
+    - name: Copy files and directories from $HOST_HOME to $REMOTE_HOME
+      block:
+        - name: Copy `.ssh` dir
+          synchronize:
+            # In push mode the localhost or delegate is the source.
+            # In pull mode the remote host in context is the source.
+            mode: push
+            src: $HOME/.ssh
+            dest: $HOME/.ssh
+            recursive: yes
+            archive: yes
+
+        # - name: Copy `.config` dir
+        #   synchronize:
+        #     mode: push
+        #     src: $HOME/.config
+        #     dest: $HOME/.config
+        #     recursive: yes
+        #     archive: yes
+
+        # - name: Copy `.mozilla` dir
+        #   synchronize:
+        #     mode: push
+        #     src: $HOME/.mozilla
+        #     dest: $HOME/.mozilla
+        #     recursive: yes
+        #     archive: yes
+
+        # - name: Copy `.thunderbird` dir
+        #   synchronize:
+        #     mode: push
+        #     src: $HOME/.thunderbird
+        #     dest: $HOME/.thunderbird
+        #     recursive: yes
+        #     archive: yes
+
+      become_user: "{{ user }}"
+      tags: rsync
 
     # - name: Creating user "{{ user }}" with admin access
     #   block:
@@ -127,3 +214,87 @@
         service:
           name: avahi-daemon
           state: restarted
+
+      - name: Install basic packages
+        apt:
+          pkg:
+            - vlc
+            - gimp
+            - thunderbird
+          state: latest
+          update_cache: true
+      tags: utils
+
+    - name: Install Communication and Multimedia tools
+      block:
+        - name: Running apt upgrade
+          apt:
+            upgrade: "yes"
+            update_cache: yes
+
+        - name: Adding key
+          apt_key:
+            url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+            state: present
+
+        - name: Adding specified repository into sources list
+          ansible.builtin.apt_repository:
+            repo: 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs vscodium main'
+            state: present
+
+        - name: Adding key
+          apt_key:
+            url: https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg
+            state: present
+
+        - name: Adding specified repository into sources list
+          ansible.builtin.apt_repository:
+            repo: 'deb http://repository.spotify.com stable non-free'
+            state: present
+
+        - name: Adding key
+          apt_key:
+            url: https://updates.signal.org/desktop/apt/keys.asc
+            state: present
+
+        - name: Adding specified repository into sources list
+          ansible.builtin.apt_repository:
+            repo: 'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main'
+            state: present
+
+        - name: Adding key
+          apt_key:
+            url: https://packages.element.io/debian/element-io-archive-keyring.gpg
+            state: present
+
+        - name: Adding specified repository into sources list
+          ansible.builtin.apt_repository:
+            repo: 'deb https://packages.element.io/debian/ default main'
+            state: present
+
+        - name: Installing MullVadVPN
+          apt:
+            deb: https://mullvad.net/download/app/deb/latest
+            state: present
+            update_cache: yes
+
+        - name: Installing Slack
+          apt:
+            deb: https://downloads.slack-edge.com/releases/linux/4.23.0/prod/x64/slack-desktop-4.23.0-amd64.deb
+            state: present
+            update_cache: yes
+
+        - name: Installing codium package
+          apt:
+            pkg:
+              - codium
+              - spotify-client
+              - signal-desktop
+              - element-desktop
+              - gimp
+              - vlc
+            state: present
+            update_cache: yes
+
+      tags: comm_media
+

@@ -4,7 +4,7 @@ PLAYBOOK=provisioning.yml
 depending-roles:
 	sudo ansible-galaxy install -r requirements.yml
 
-ANSIBLE_PROVISION=sudo ansible-playbook ${PLAYBOOK} -i hosts
+ANSIBLE_PROVISION=sudo ansible-playbook ${PLAYBOOK} -vvv -i hosts
 provision: depending-roles
 	${ANSIBLE_PROVISION}
 
